@@ -1,0 +1,18 @@
+services:
+  laravel_app:
+    container_name: "fitness-app-backend"
+    build: .
+    ports:
+      - "8081:80"
+    volumes:
+      - "./www:/var/www/html"
+  pgsql:
+    container_name: "pgsql-fitness"
+    image: postgres:17.2
+    ports:
+      - "5434:5432"
+    volumes:
+      - "./data:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_PASSWORD: pgsql
+      POSTGRES_DB: fitness
