@@ -19,6 +19,6 @@ class Service extends Model
     ];
     public function prices(): HasMany
     {
-        return $this->hasMany(ServicePrice::class);
+        return $this->hasMany(ServicePrice::class)->orderBy('sessions_count');
     }
 }
