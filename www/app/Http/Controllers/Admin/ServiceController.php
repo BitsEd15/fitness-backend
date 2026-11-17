@@ -37,7 +37,7 @@ class ServiceController extends Controller
             'title' => ['sometimes', 'required', 'string', 'max:255'],//sometimes значит «проверяй это поле, только если оно пришло в запросе». Вместе с required получается: «поля может не быть вообще, но если оно есть, оно не должно быть пустым».
             'description' => ['sometimes', 'required', 'string'],
             'is_active' => ['sometimes', 'required', 'boolean'],
-            'sort_order' => ['sometimes', 'required', 'integer', 'min:0', 'max:255'],
+            'sort_order' => ['sometimes', 'required', 'integer', 'min:0', 'max:15'],
         ]);
 
         $service->update($data); //присваивает новые значения и сохраняет (UPDATE). В базу уходят только изменённые поля. Если из запроса ничего не изменилось, запрос к базе вообще не отправляется.

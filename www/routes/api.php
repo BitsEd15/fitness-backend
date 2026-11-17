@@ -7,6 +7,8 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\ServicePriceController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\ExerciseController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -31,4 +33,17 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::apiResource('services.prices', ServicePriceController::class)//'services.prices': точка означает вложенность, «prices внутри services».Из каждого слова Laravel делает имя параметра в единственном числе: services → {service}, prices → {price}.
     ->shallow()//называется мелкой вложенностью (shallow nesting): родитель остаётся в адресе только там, где без него не обойтись. убирает родителя у одиночных маршрутов
     ->only(['store', 'update', 'destroy']);//Он оставляет из набора только перечисленные методы: store, update, destroy. Остальные два (index и show) нам не нужны: цены уже приходят вложенными в GET /admin/services, а отдельно читать одну цену никто не будет.
+});
+
+//Публичный маршрут для статей
+Route::prefix('articles')->group(function(){
+    Route::get('/',[ArticleController::class,'index']);
+    Route::get('/{id}',[ArticleController::class,'show']);
+});
+
+
+//Публичный маршрут для упражнений
+Route::prefix('exercises')->group(function(){
+    Route::get('/',[ExerciseController::class,'index']);
+    Route::get('/{id}',[ExerciseController::class,'show']);
 });
