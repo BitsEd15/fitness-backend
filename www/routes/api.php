@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\ServicePriceController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ExerciseController;
+use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
+use App\Http\Controllers\Admin\ExerciseController as AdminExerciseController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -29,10 +31,17 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     // ресурса вместо четырёх отдельных строк. ->except('show') убирает маршрут 
     // «получить одну услугу»: админ-странице хватает общего списка, и лишних маршрутов 
     // не нужно. Посмотреть результат можно командой 
-    // php artisan route:list --path=admin/services.
+    // php artisan route:list --path=admin/segfrvices.
     Route::apiResource('services.prices', ServicePriceController::class)//'services.prices': точка означает вложенность, «prices внутри services».Из каждого слова Laravel делает имя параметра в единственном числе: services → {service}, prices → {price}.
     ->shallow()//называется мелкой вложенностью (shallow nesting): родитель остаётся в адресе только там, где без него не обойтись. убирает родителя у одиночных маршрутов
     ->only(['store', 'update', 'destroy']);//Он оставляет из набора только перечисленные методы: store, update, destroy. Остальные два (index и show) нам не нужны: цены уже приходят вложенными в GET /admin/services, а отдельно читать одну цену никто не будет.
+    Route::get('/articles',[AdminArticleController::class, 'index']);
+    Route::get('/articles/{article}',[AdminArticleController::class, 'show']);
+    Route::post('/articles',[AdminArticleController::class, 'store']);
+    Route::put('/articles/{article}',[AdminArticleController::class, 'update']);
+    Route::delete('/articles/{article}',[AdminArticleController::class, 'destroy']);
+
+    Route::apiResource('exercises', AdminExerciseController::class);
 });
 
 //Публичный маршрут для статей
